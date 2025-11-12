@@ -40,7 +40,7 @@ public class FacultyService {
 
     public Collection<Faculty> filterFacultyOfColor(String color) {
 //        return facultys.values().stream().filter(faculty -> faculty.getColor() == color).collect(Collectors.toList());
-        return getAllFaculty().stream().filter(e -> e.getColor() == color).collect(Collectors.toList());
+        return getAllFaculty().stream().filter(e -> e.getColor().equals(color)).collect(Collectors.toList());
 
     }
 }
