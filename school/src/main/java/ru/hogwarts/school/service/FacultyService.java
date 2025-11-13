@@ -1,46 +1,19 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.stream.Collectors;
 
-@Service
-public class FacultyService {
-    private final HashMap<Long, Faculty> facultys = new HashMap<>();
-    private static long lastId = 0;
+public interface FacultyService {
+    Faculty findFaculty(Long id);
 
-    public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(++lastId);
-        facultys.put(lastId, faculty);
-        return faculty;
-    }
+    Collection<Faculty> findAllFacultyInfo();
 
-    public Faculty findFaculty(long id) {
-        return facultys.get(id);
-    }
+    Faculty createFaculty(Faculty faculty);
 
-    public Collection<Faculty> getAllFaculty() {
-        return facultys.values();
-    }
+    Faculty editFaculty(Faculty faculty);
 
-    public Faculty editFaculty(Faculty faculty) {
-        if (facultys.containsKey(faculty.getId())) {
-            facultys.put(faculty.getId(), faculty);
-            return faculty;
-        }
-        return null;
-    }
+    Faculty deleteFaculty(long id);
 
-    public Faculty deleteFaculty(long id) {
-        return facultys.remove(id);
-    }
-
-    public Collection<Faculty> filterFacultyOfColor(String color) {
-//        return facultys.values().stream().filter(faculty -> faculty.getColor() == color).collect(Collectors.toList());
-        return getAllFaculty().stream().filter(e -> e.getColor().equals(color)).collect(Collectors.toList());
-
-    }
+    Collection<Faculty> filterFacultyOfColor(String color);
 }
