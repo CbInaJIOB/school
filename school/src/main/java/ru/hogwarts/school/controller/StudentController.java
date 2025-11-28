@@ -27,7 +27,11 @@ public class StudentController {
     }
 
     @GetMapping                 //GET   получить всех студентов
-    public Collection<Student> getAllStudents() {
+    public Collection<Student> getAllStudents(@RequestParam(defaultValue = "0") int min,
+                                              @RequestParam(defaultValue = "0") int max) {
+        if (min != 0 && max != 0) {
+            return studentService.findByAgeBetween(min, max);
+        }
         return studentService.getAllStudents();
     }
 
@@ -46,4 +50,8 @@ public class StudentController {
         return studentService.findByAge(age);
     }
 
+    @GetMapping("/studentFaculty/{id}")
+    public String findStudentFaculty(Long id) {
+        return studentService.facultyStudent(id);
+    }
 }
