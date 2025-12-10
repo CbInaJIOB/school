@@ -1,8 +1,8 @@
 package ru.hogwarts.school.controller;
 
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -14,7 +14,7 @@ public class StudentController {
     private final StudentService studentService;
 
 
-    public StudentController(StudentService studentService, AvatarService avatarService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
     }
 
@@ -52,8 +52,8 @@ public class StudentController {
         return studentService.findByAge(age);
     }
 
-    @GetMapping("/studentFaculty/{id}")
-    public String findStudentFaculty(Long id) {
+    @GetMapping("/studentFaculty/{id}")         // получить факультет на котором учится студент
+    public Faculty findStudentFaculty(@PathVariable Long id) {
         return studentService.facultyStudent(id);
     }
 }
