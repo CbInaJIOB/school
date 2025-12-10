@@ -21,10 +21,13 @@ import ru.hogwarts.school.service.AvatarService;
 import ru.hogwarts.school.service.FacultyService;
 import ru.hogwarts.school.service.StudentService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +51,7 @@ public class FacultyControllerWebMvcTest {
     private AvatarService avatarService;
     @SpyBean
     private FacultyService facultyService;
+
 
     @InjectMocks
     private FacultyController facultyController;
@@ -78,10 +82,6 @@ public class FacultyControllerWebMvcTest {
 
     @Test
     public void getFacultyOfColorTest() throws Exception {
-//        JSONObject facultyObject = new JSONObject();
-//        facultyObject.put("id", facultyName);
-//        facultyObject.put("name", facultyName);
-//        facultyObject.put("color", facultyColor);
 
         Faculty faculty = new Faculty();
         faculty.setId(facultyId);
@@ -134,8 +134,8 @@ public class FacultyControllerWebMvcTest {
         when(facultyRepository.findAll()).thenReturn(List.of(f1, f2));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/faculty")
-                .accept(MediaType.APPLICATION_JSON))
+                        .get("/faculty")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(facultyId))
                 .andExpect(jsonPath("$[0].name").value(facultyName))
@@ -268,28 +268,24 @@ public class FacultyControllerWebMvcTest {
         s2.setAge(12);
         s2.setFaculty(faculty);
 
-         List<Student> students = new ArrayList<>();
+        List<Student> students = new ArrayList<>();
         students.add(s1);
         students.add(s2);
 
         faculty.setStudents(students);
-
-        when(facultyService.getStudentByFaculty(faculty.getId())).thenReturn(students);
+        doReturn(students).when(facultyService).getStudentByFaculty(facultyId);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/getStudentByFaculty/" + facultyId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(2));
-
-
-//                .andExpect(jsonPath("$[0].id").value(s1.getId()))
-//                .andExpect(jsonPath("$[0].name").value(s1.getName()))
-//                .andExpect(jsonPath("$[0].age").value(s1.getAge()))
-
-//                .andExpect(jsonPath("$[1].id").value(s2.getId()))
-//                .andExpect(jsonPath("$[1].name").value(s2.getName()));
-//                .andExpect(jsonPath("$[1].age").value(s2.getAge()));
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].id").value(s1.getId()))
+                .andExpect(jsonPath("$[0].name").value(s1.getName()))
+                .andExpect(jsonPath("$[0].age").value(s1.getAge()))
+                .andExpect(jsonPath("$[1].id").value(s2.getId()))
+                .andExpect(jsonPath("$[1].name").value(s2.getName()))
+                .andExpect(jsonPath("$[1].age").value(s2.getAge()));
 
     }
 }
