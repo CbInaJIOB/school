@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@JsonIgnoreProperties(value = {"students"})
+@JsonIgnoreProperties(value = {"student"})
 public class Faculty {
 
     @Id
@@ -22,7 +22,7 @@ public class Faculty {
     @OneToMany(mappedBy = "faculty")
     private List<Student> students;
 
-    public Faculty(long id, String name, String color, List<Student> student) {
+    public Faculty(long id, String name, String color, List<Student> students) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -57,11 +57,11 @@ public class Faculty {
     }
 
 
-    public List<Student> getStudent() {
+    public List<Student> getStudents() {
         return students;
     }
 
-    public void setStudent(List<Student> student) {
+    public void setStudents(List<Student> student) {
         this.students = students;
     }
 
